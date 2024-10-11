@@ -35,10 +35,17 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::get('/level', [LevelController::class, 'index']);
         Route::post('/level/list', [LevelController::class, 'list']); // untuk list json datatables
         Route::get('/level/create', [LevelController::class, 'create']);
+        Route::get('/level/create_ajax', [LevelController::class, 'create_ajax']);
+        Route::post('/level/ajax', [LevelController::class, 'store_ajax']);
         Route::post('/level', [LevelController::class, 'store']);
         Route::get('/level/{id}', [LevelController::class, 'show']);
+        Route::get('/level/{id}/show_ajax', [LevelController::class, 'show_ajax']);
         Route::get('/level/{id}/edit', [LevelController::class, 'edit']); // untuk tampilkan form edit
         Route::put('/level/{id}', [LevelController::class, 'update']); // untuk proses update data
+        Route::get('/level/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
+        Route::put('/level/{id}/update_ajax', [LevelController::class, 'update_ajax']);
+        Route::get('/level/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
+        Route::delete('/level/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
         Route::delete('/level/{id}', [LevelController::class, 'destroy']); // untuk proses hapus
     });
 
