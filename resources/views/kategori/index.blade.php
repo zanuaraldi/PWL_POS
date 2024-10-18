@@ -3,8 +3,9 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
+            <h3 class="card-title">Daftar Kategori</h3>
             <div class="card-tools">
+                <button onclick="modalAction('{{ url('/kategori/import') }}')" class="btn btn-info">Import Kategori</button>
                 <a href="{{ url('kategori/create') }}" class="btn btn-sm btn-primary mt-1">Tambah</a>
                 <button onclick="modalAction('{{ url('kategori/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
             </div>
@@ -16,10 +17,10 @@
             @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <table class="table table-border table-striped table-hover table-sm" id="table_kategori">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Kategori Kode</th>
                         <th>Kategori Nama</th>
                         <th>Aksi</th>
@@ -44,6 +45,7 @@
         var dataKategori
         $(document).ready(function(){
             dataKategori = $('#table_kategori').DataTable({
+                processing: true,
                 //serverSide: true, jika ingin menggunakan server side processing
                 serverSide: true,
                 ajax:{

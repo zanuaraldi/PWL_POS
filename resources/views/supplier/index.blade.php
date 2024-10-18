@@ -3,8 +3,9 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
+            <h3 class="card-title">Daftar Supplier</h3>
             <div class="card-tools">
+                <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">Import Supplier</button>
                 <a href="{{ url('supplier/create') }}" class="btn btn-sm btn-primary mt-1">Tambah</a>
                 <button onclick="modalAction('{{ url('supplier/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
             </div>
@@ -16,10 +17,10 @@
             @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <table class="table table-border table-striped table-hover table-sm" id="table_supplier">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_supplier">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Supplier Kode</th>
                         <th>Supplier Nama</th>
                         <th>Supplier Alamat</th>
@@ -45,6 +46,7 @@
         var dataSupplier
         $(document).ready(function(){
             dataSupplier = $('#table_supplier').DataTable({
+                processing: true,
                 //serverSide: true, jika ingin menggunakan server side processing
                 serverSide: true,
                 ajax:{

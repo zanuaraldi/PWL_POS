@@ -338,6 +338,6 @@ class BarangController extends Controller
                 ]);
             }
         }
-        return redirect('/');
+        return redirect('/barang');
     }
 }

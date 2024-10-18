@@ -1,12 +1,12 @@
 @extends('layouts.template')
 
 @section('content')
-    <div class="card">
+    <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
+            <h3 class="card-title">Daftar Barang</h3>
             <div class="card-tools">
                 <button onclick="modalAction('{{ url('/barang/import') }}')" class="btn btn-info">Import Barang</button>
-                <a href="{{ url('barang/create') }}" class="btn btn-sm btn-primary mt-1">Tambah</a>
+                <a href="{{ url('/barang/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Barang</a>
                 <button onclick="modalAction('{{ url('barang/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
             </div>
         </div>
@@ -133,14 +133,14 @@
                 ]
             });
 
-            $('#table_barang_filter_date input').unbind().bind().on('keyup', function(e){
+            $('#table_barang_filter input').unbind().bind().on('keyup', function(e){
                 if(e.keyCode == 13){ // enter key
-                    tableBarang.search(this.value).draw();
+                    dataBarang.search(this.value).draw();
                 }
             });
 
             $('#filter_kategori').on('change', function(){
-                dataBarang.ajax.reload();
+                dataBarang.draw();
             });
         });
     </script>
