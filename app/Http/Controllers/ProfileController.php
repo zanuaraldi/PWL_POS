@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\UserModel;
 
 class ProfileController extends Controller
 {
@@ -14,11 +15,15 @@ class ProfileController extends Controller
         ];
 
         $activeMenu = 'profile';
+        $user = UserModel::select('level_id', 'user_id', 'username', 'nama')->with('level');
+        
 
-        return view('profile', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu]);
+        return view('profile', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu, 'user' => $user]);
     }
 
     public function upload_foto(Request $request){
+        $user = UserModel::select('user_id', 'username', 'nama')->get();
+
         // buat validasi ektensi dari filenya
         $request->validate([
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
@@ -30,7 +35,7 @@ class ProfileController extends Controller
         // ini buat hapus foto profil lama yang nantinya diganti sama yang baru
         $extensions = ['jpg', 'jpeg', 'png'];
         foreach ($extensions as $ext) {
-            $namaFileLama = $folderPath . auth()->user()->username . '_profile.' .$ext;
+            $namaFileLama = $folderPath . $user->username . '_profile.' .$ext;
             if(Storage::disk('public')->exists($namaFileLama)){
                 Storage::disk('public')->delete($namaFileLama);
                 break;
@@ -41,7 +46,7 @@ class ProfileController extends Controller
         $file = $request->file('foto');
 
         // Buat nama file unik
-        $filename = auth()->user()->username . '_profile.' . $file->getClientOriginalExtension();
+        $filename = $user->username . '_profile.' . $file->getClientOriginalExtension();
 
         // Simpan file ke storage/app/public/uploads/profile_pictures/(username)
         $file->storeAs($folderPath, $filename, 'public');

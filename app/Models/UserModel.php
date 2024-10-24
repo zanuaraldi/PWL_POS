@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable; // implementasi class Authenticatable
 
 class UserModel extends Authenticatable
@@ -38,5 +39,13 @@ class UserModel extends Authenticatable
     // Mendapatkan kode role
     public function getRole(){
         return $this->level->level_kode;
+    }
+
+    public function stok(): HasMany {
+        return $this->hasMany(StokModel::class, 'user_id', 'user_id');
+    }
+
+    public function penjualan(): HasMany {
+        return $this->hasMany(PenjualanModel::class, 'user_id', 'user_id');
     }
 }

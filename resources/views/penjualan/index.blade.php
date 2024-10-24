@@ -3,12 +3,12 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">{{ $page->title}}</h3>
+            <h3 class="card-title"> {{ $page->title}} </h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/user/import') }}')" class="btn btn-info">Import User</button>
-                <a href="{{ url('/user/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export User</a>
-                <a href="{{ url('/user/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export User</a>
-                <button onclick="modalAction('{{ url('user/create_ajax') }}')" class="btn btn-success">Tambah Data (Ajax)</button>
+                {{-- <button onclick="modalAction('{{ url('/penjualan/import') }}')" class="btn btn-info">Import Transaksi Penjualan</button> --}}
+                <a href="{{ url('/penjualan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Transaksi Penjualan</a>
+                <a href="{{ url('/penjualan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Transaksi Penjualan</a>
+                <button onclick="modalAction('{{ url('penjualan/create_ajax') }}')" class="btn btn-success">Tambah Data (Ajax)</button>
             </div>
         </div>
         <div class="card-body">
@@ -25,22 +25,23 @@
                         <div class="col-3">
                             <select name="filter_user" id="filter_user" class="form-control" required>
                                 <option value="">- Semua -</option>
-                                @foreach ($level as $item)
-                                    <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
+                                @foreach ($user as $u)
+                                    <option value="{{ $u->user_id }}">{{ $u->nama }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-text text-muted">Level Pengguna</small>
+                            <small class="form-text text-muted">Nama Kasir</small>
                         </div>
                     </div>
                 </div>
             </div>
-            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_penjualan">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Username</th>
-                        <th>Nama</th>
-                        <th>Level Pengguna</th>
+                        <th>Nama Kasir</th>
+                        <th>Pembeli</th>
+                        <th>Kode Transaksi Penjualan</th>
+                        <th>Tanggal Transaksi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -60,19 +61,18 @@
                 $('#myModal').modal('show');
             });
         }
-
-        var dataUser;
+        var dataPenjualan
         $(document).ready(function(){
-            dataUser = $('#table_user').DataTable({
+            dataPenjualan = $('#table_penjualan').DataTable({
                 processing: true,
                 //serverSide: true, jika ingin menggunakan server side processing
                 serverSide: true,
                 ajax:{
-                    "url": "{{ url('user/list') }}",
+                    "url": "{{ url('penjualan/list') }}",
                     "dataType": "json",
                     "type": "POST",
                     "data": function (d){
-                        d.level_id = $('#filter_user').val();
+                        d.user_id = $('#filter_user').val();
                     }
                 },
                 columns:[
@@ -83,20 +83,24 @@
                         orderable: false,
                         searchable: false
                     },{
-                        data: "username",
+                        data: "user.nama",
                         className: "",
                         //orderable: true, jika ingin kolom bisa diurutkan
                         orderable: true,
                         //searchable: true, jika ingin kolom bisa dicari
                         searchable: true
                     },{
-                        data: "nama",
+                        data: "pembeli",
                         className: "",
-                        orderable:true,
+                        orderable: true,
                         searchable: true
                     },{
-                        // mengambil data level dari hasil ORM berelasi
-                        data: "level.level_nama",
+                        data: "penjualan_kode",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },{
+                        data: "penjualan_tanggal",
                         className: "",
                         orderable: false,
                         searchable: false
@@ -108,13 +112,8 @@
                     }
                 ]
             });
-            $('#table_user_filter input').unbind().bind().on('keyup', function(e){
-                if(e.keyCode == 13){ // enter key
-                    dataUser.search(this.value).draw();
-                }
-            });
             $('#filter_user').on('change', function(){
-                dataUser.ajax.reload();
+                dataPenjualan.ajax.reload();
             });
         });
     </script>
