@@ -35,8 +35,10 @@ Route::post('register', [AuthController::class, 'postregister']);
 
 Route::middleware(['auth'])->group(function () { // artinya semua route di dalam group ini harus login dulu
     Route::get('/', [WelcomeController::class, 'index']);
-    Route::get('/profile', [ProfileController::class, 'index']);
-    Route::post('upload_foto', [ProfileController::class, 'upload_foto'])->name('upload.foto');
+    Route::group(['prefix' =>'profile'],function(){
+        Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
+        Route::patch('/{id}', [ProfileController::class, 'update'])->name('profile.update');
+    });
     // route level
 
     Route::group(['prefix' => 'level', 'middleware' => 'authorize:ADM'], function () {
@@ -150,7 +152,7 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::get('/export_pdf', [BarangController::class, 'export_pdf']); // ajax export pdf
     });
 
-    Route::group(['prefix' => 'stok', 'middleware' => 'authorize:ADM,MNG'], function () {
+    Route::group(['prefix' => 'stok', 'middleware' => 'authorize:ADM,MNG,KSR'], function () {
         // Route::get('/create', [StokController::class, 'create']);
         // Route::post('/', [StokController::class, 'store']);
         // Route::get('/{id}/edit', [StokController::class, 'edit']);
@@ -172,7 +174,7 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::get('/export_pdf', [StokController::class, 'export_pdf']); // ajax export pdf        
     });
 
-    Route::group(['prefix' => 'penjualan', 'middleware' => 'authorize:ADM,MNG'], function () {
+    Route::group(['prefix' => 'penjualan', 'middleware' => 'authorize:ADM,MNG,KSR'], function () {
         // Route::get('/create', [PenjualanController::class, 'create']);
         // Route::post('/', [PenjualanController::class, 'store']);
         // Route::get('/{id}', [PenjualanController::class, 'show']);

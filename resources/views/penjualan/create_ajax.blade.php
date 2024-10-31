@@ -9,16 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Nama Kasir</label>
-                    <select name="user_id" id="user_id" class="form-control" required>
-                        <option value="">- Pilih Kasir -</option>
-                        @foreach($user as $l)
-                            <option value="{{ $l->user_id }}">{{ $l->nama }}</option>
-                        @endforeach
-                    </select>
-                    <small id="error-user_id" class="error-text form-text text-danger"></small>
-                </div>
+                <input type="text" value="{{ auth()->user()->user_id }}" name="user_id" id="user_id" class="form-control" placeholder="{{ auth()->user()->username }}" hidden>
                 <div class="form-group">
                     <label>Nama Pembeli</label>
                     <input value="" type="text" name="pembeli" id="pembeli" class="form-control" required>
